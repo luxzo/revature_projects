@@ -15,6 +15,8 @@ public record Loans(
         float interestRate,
         BigDecimal amountDue,
         int loanTerm,
+        BigDecimal debtPayment,
+        Date debtPaymentDate,
         String userId
 ) {
 }
