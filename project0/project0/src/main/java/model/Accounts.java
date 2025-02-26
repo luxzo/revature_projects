@@ -1,9 +1,9 @@
 package model;
 
 public record Accounts(
-        String accountId,
+        String account_id,
         String email,
         String password,
-        String roleId
+        String role_id
 ) {
 }

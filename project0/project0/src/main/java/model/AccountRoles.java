@@ -3,7 +3,7 @@ package model;
 import constants.Roles;
 
 public record AccountRoles(
-        String roleId,
+        String role_id,
         Roles role
 ) {
 }

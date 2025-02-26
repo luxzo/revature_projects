@@ -1,10 +1,10 @@
 package model;
 
 public record Users(
-        String userId,
+        String user_id,
         String name,
-        String lasName,
+        String las_name,
         String phone,
-        String accountId
+        String account_id
 ) {
 }
