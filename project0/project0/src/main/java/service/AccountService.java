@@ -22,32 +22,39 @@ public class AccountService {
         this.accountDao = accountDao;
     }
 
-    public Account registerNewAccount(String email, String password, int roleId) throws PSQLException {
+    public Account registerNewAccount(String email, String password, int roleId) {
         String hashedPass = "";
         Account newAccount = new Account();
+
+        //Call method hash password
+        HashService hashService = new HashService();
         try {
-            hashedPass = hashPassword(password);
+            hashedPass = hashService.hashPassword(password);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             logger.error(e.getMessage());
         }
-        if ((email != null || !email.equals(""))  && (password != null || !password.equals("")) && roleId != 0) {
-            newAccount.setEmail(email);
-            newAccount.setPassword(hashedPass);
-            newAccount.setRole_id(roleId);
-            return accountDao.registerNewAccount(newAccount);
+
+        try {
+            if ((email != null || !email.equals(""))  && (password != null || !password.equals("")) && roleId != 0) {
+                newAccount.setEmail(email);
+                newAccount.setPassword(hashedPass);
+                newAccount.setRole_id(roleId);
+                return accountDao.registerNewAccount(newAccount);
+            }
+            else {
+                logger.error("\"error\": \"Missing email, password or role id\"");
+            }
+        } catch (PSQLException e) {
+            logger.error(e.getMessage());
         }
-        else {
-            logger.error("\"error\": \"Missing email, password or role id\"");
-        }
-//        return accountDao.registerNewAccount(newAccount);
         return null;
     }
 
 
-    /*
+    /**
      * Encrypt password using 256 algorithm
      * iterationCount could be less than 65536, but also less secure
-     * @param byte[] retrieves encoded password, it is returned
+     * @param byte[] retrieves encoded password, then is returned
      */
     public String hashPassword(String pass) throws NoSuchAlgorithmException, InvalidKeySpecException {
         SecureRandom random = new SecureRandom();
@@ -57,10 +64,6 @@ public class AccountService {
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
 
         byte[] hashed = factory.generateSecret(spec).getEncoded();
-
-        //Todo delete 2 following lines since they were for developing purpose
-        String hashedPass = Base64.getEncoder().encodeToString(hashed);
-        logger.info(hashedPass);
 
         return Base64.getEncoder().encodeToString(hashed);
     }

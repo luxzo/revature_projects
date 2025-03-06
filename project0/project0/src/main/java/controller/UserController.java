@@ -55,7 +55,7 @@ public class UserController {
                     user.getAccount_id()
             );
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
 
         if (newUser != null) {

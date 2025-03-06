@@ -2,6 +2,7 @@ package controller;
 
 import io.javalin.http.Context;
 import model.Account;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.AccountService;
@@ -14,19 +15,18 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    /*Todo check why it is not catching exceptions when field is null or empty. Also is not throwing exception when account already exists
-    * Todo how to connect User class to register user all at once????
-    * Register a new user
-     */
-
-    /*
-    * Json object to test
-{
-    "email": "JohnDoe@mail.com",
-    "password": "password",
-    "role_id": 2
-}
-     */
+    /**
+     * Todo check why it is not catching exceptions when field is null or empty.
+     * Todo Also is not throwing exception when account already exists
+     * Todo how to connect User class to register account and user, all at once????
+     * Register a new user
+     * Json body:
+     * {
+     * "email": "JohnDoe@mail.com",
+     * "password": "password",
+     * "role_id": 2
+     * }
+     * **/
     public void registerNewAccount(Context ctx) {
         Account account = ctx.bodyAsClass(Account.class);
 

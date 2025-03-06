@@ -46,8 +46,8 @@ public class AccountDao {
                     newAccount.setAccountId(newAccountId);
                 }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException eSQL) {
+            logger.error(eSQL.getMessage());
         }
 
         if (newAccount != null)

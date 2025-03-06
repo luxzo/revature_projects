@@ -18,15 +18,4 @@ public class LoginDao {
     AccountController accountController = new AccountController(accountService);
 
     public LoginDao() throws SQLException { }
-
-    /*
-    Entry point for the application
-    Todo Crear endpoint /auth/login
-    Todo Handle exceptions
-     */
-    public Javalin startApi() {
-        Javalin app = Javalin.create();
-        app.post("/auth/register", accountController::registerNewAccount);
-        return app;
-    }
 }
