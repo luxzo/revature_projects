@@ -1,19 +1,19 @@
 package model;
 
-public class Users {
+public class User {
     private int userId;
     private String name;
     private String last_name;
     private String phone;
     private int account_id;
 
-    public Users(String name, String last_name, String phone) {
+    public User(String name, String last_name, String phone) {
         this.name = name;
         this.last_name = last_name;
         this.phone = phone;
     }
 
-    public Users() {
+    public User() {
     }
 
     public int getUserId() {
@@ -58,7 +58,7 @@ public class Users {
 
     @Override
     public String toString() {
-        return "Users{" +
+        return "User{" +
                 "name='" + name + '\'' +
                 ", last_name='" + last_name + '\'' +
                 ", phone='" + phone + '\'' +

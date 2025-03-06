@@ -1,7 +1,7 @@
 package controller;
 
 import io.javalin.http.Context;
-import model.Accounts;
+import model.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.AccountService;
@@ -28,9 +28,9 @@ public class AccountController {
 }
      */
     public void registerNewAccount(Context ctx) {
-        Accounts account = ctx.bodyAsClass(Accounts.class);
+        Account account = ctx.bodyAsClass(Account.class);
 
-        Accounts newAccount = null;
+        Account newAccount = null;
 
         try {
             newAccount = accountService.registerNewAccount(

@@ -1,6 +1,6 @@
 package model;
 /*
-public record Accounts(
+public record Account(
         String account_id,
         String email,
         String password,
@@ -8,26 +8,26 @@ public record Accounts(
 ) {
 }*/
 
-public class Accounts {
+public class Account {
     private int accountId;
     private String email;
     private String password;
     private int role_id;
 
-    public Accounts(String email, String password, int role_id) {
+    public Account(String email, String password, int role_id) {
         this.email = email;
         this.password = password;
         this.role_id = role_id;
     }
 
-    public Accounts(String email, String password) {
+    public Account(String email, String password) {
         this.email = email;
         this.password = password;
     }
 
-    public Accounts() {}
+    public Account() {}
 
-    public Accounts(String email) {
+    public Account(String email) {
         this.email = email;
     }
 
@@ -65,7 +65,7 @@ public class Accounts {
 
     @Override
     public String toString() {
-        return "Accounts{" +
+        return "Account{" +
                 "email='" + email + '\'' +
                 '}';
     }

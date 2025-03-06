@@ -1,11 +1,9 @@
 package model;
 
-import constants.Status;
-
 import java.math.BigDecimal;
 import java.sql.Date;
 
-public record Loans(
+public record Loan(
         String loan_id,
         BigDecimal loan_amount,
         Date start_date,

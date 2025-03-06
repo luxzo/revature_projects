@@ -2,7 +2,7 @@ package dao;
 
 import controller.ConnectionController;
 import dto.UserDto;
-import model.Users;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,9 +17,10 @@ public class UserDao {
     public UserDao(int accountId) { this.accountId = accountId; }
 
     /*
-    * Register a new user
-     */
-    public Users registerNewUser(Users newUser) {
+    * Register a new user Dao
+    *  This class persists into the database the new user created
+    */
+    public User registerNewUser(User newUser) {
         String newUserSql = "INSERT INTO public.users(name, last_name, phone, account_id) VALUES(?, ?, ?, ?)";
         try (Connection conn = ConnectionController.getConnection()) {
             PreparedStatement pstmNewUser = conn.prepareStatement(newUserSql, Statement.RETURN_GENERATED_KEYS);
@@ -42,20 +43,6 @@ public class UserDao {
         }
         return newUser;
     }
-
-    /*public Users registerNewUser(Users newUser) {
-        String newUserSql = "INSERT INTO public.users(name, last_name, phone, account_id) VALUES (?, ?, ?, ?)";
-        try (Connection conn = ConnectionController.getConnection()) {
-            PreparedStatement pstmNewUser = conn.prepareStatement(newUserSql, Statement.RETURN_GENERATED_KEYS);
-            pstmNewUser.setString(1, newUser.getName());
-            pstmNewUser.setString(2, newUser.getLast_name());
-            pstmNewUser.setString(3, newUser.getPhone());
-            pstmNewUser.setInt(4, newUser.getAccountId());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }*/
 
     /*Get a user by Id, will show name, lastName and phone.
     * If user does not exist, will prompt an error in console and show a Json object with user Id, as well

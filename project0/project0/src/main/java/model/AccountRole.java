@@ -2,19 +2,19 @@ package model;
 
 import constants.Roles;
 
-public class AccountRoles {
+public class AccountRole {
     private int role_id;
     private Roles role;
 
-    public AccountRoles() {
+    public AccountRole() {
     }
 
-    public AccountRoles(int role_id, String role) {
+    public AccountRole(int role_id, String role) {
         this.role_id = role_id;
         this.role = Roles.valueOf(role.toUpperCase());
     }
 
-    public AccountRoles(String role) {
+    public AccountRole(String role) {
         this.role = Roles.valueOf(role.toUpperCase());
     }
 
@@ -36,7 +36,7 @@ public class AccountRoles {
 
     @Override
     public String toString() {
-        return "AccountRoles{" +
+        return "AccountRole{" +
                 "role=" + role +
                 '}';
     }

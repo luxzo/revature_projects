@@ -1,18 +1,20 @@
 package dao;
 
-import constants.Roles;
-import model.AccountRoles;
-
-import javax.management.relation.Role;
+import model.AccountRole;
 
 public class AccountRoleDao {
-    public AccountRoles findByRoleName(String roleName) {
-        AccountRoles accountRoles = new AccountRoles();
+
+    /*
+    Find a role by name
+    Todo currently is not operational, will check in future update
+     */
+    public AccountRole findByRoleName(String roleName) {
+        AccountRole accountRole = new AccountRole();
         if (roleName.toUpperCase().equals("MANAGER"))
-            accountRoles.setRole_id(1);
+            accountRole.setRole_id(1);
         else if (roleName.toUpperCase().equals("USER")) {
-            accountRoles.setRole_id(2);
+            accountRole.setRole_id(2);
         }
-        return accountRoles;
+        return accountRole;
     }
 }

@@ -1,7 +1,7 @@
 package service;
 
 import dao.AccountDao;
-import model.Accounts;
+import model.Account;
 import org.postgresql.util.PSQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,9 +22,9 @@ public class AccountService {
         this.accountDao = accountDao;
     }
 
-    public Accounts registerNewAccount(String email, String password, int roleId) throws PSQLException {
+    public Account registerNewAccount(String email, String password, int roleId) throws PSQLException {
         String hashedPass = "";
-        Accounts newAccount = new Accounts();
+        Account newAccount = new Account();
         try {
             hashedPass = hashPassword(password);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {

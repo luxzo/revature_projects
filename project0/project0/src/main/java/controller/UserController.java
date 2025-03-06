@@ -2,7 +2,7 @@ package controller;
 
 import io.javalin.http.Context;
 import dto.UserDto;
-import model.Users;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
@@ -15,18 +15,6 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
-
-
-
-    //Todo this endpoints must be created
-
-    //        app.post("/auth/register", this::createNewUserHandler);
-//        app.post("/auth/login", this::login);
-//        app.post("/auth/logout", this::logout);
-//        app.get("/users/{id}", this::getUserById); In progress
-//        app.put("/users/{id}", this::updateUser);
-
 
     /*
      * Get a user by id handler
@@ -51,12 +39,13 @@ public class UserController {
 
 
     /*
-     * Post a new user handler
-     * Todo terminar metodo
+     * Post a new user
+     * First must be an AccountController object to create a user
+     *  Todo add exception handling
      */
     public void registerNewUser(Context ctx) {
-        Users user = ctx.bodyAsClass(Users.class);
-        Users newUser = null;
+        User user = ctx.bodyAsClass(User.class);
+        User newUser = null;
 
         try {
             newUser = userService.registerNewUser(

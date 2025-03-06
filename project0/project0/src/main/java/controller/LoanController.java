@@ -1,15 +1,8 @@
 package controller;
 
-import io.javalin.Javalin;
-import io.javalin.http.Context;
-import model.Users;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.LoanService;
-
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.List;
 
 public class LoanController {
     public static final Logger logger = LoggerFactory.getLogger(LoanController.class);

@@ -2,7 +2,7 @@ package service;
 
 import dao.UserDao;
 import dto.UserDto;
-import model.Users;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,8 +21,8 @@ public class UserService {
         return userDao.getUserById(userId);
     }
 
-    public Users registerNewUser(String name, String lastName, String phone, int accountId) {
-        Users newUser = new Users();
+    public User registerNewUser(String name, String lastName, String phone, int accountId) {
+        User newUser = new User();
         newUser.setName(name);
         newUser.setLast_name(lastName);
         newUser.setPhone(phone);
