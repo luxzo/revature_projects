@@ -7,6 +7,7 @@ import dto.LoginRequestDto;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import jakarta.servlet.http.HttpSession;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.AccountService;
@@ -24,8 +25,7 @@ public class LoginController {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     //This map stores session data
     private static final Map<String, Map<String, Object>> sessionStore = new HashMap<>();
-
-    private Map<String, Object> sessionMap = new HashMap<>();
+    HttpSession session;
 
     Connection conn = ConnectionController.getConnection();
     AccountDao accountDao = new AccountDao(conn);
@@ -34,9 +34,6 @@ public class LoginController {
     UserDao userDao = new UserDao();
     UserService userService = new UserService(userDao);
     UserController userController = new UserController(userService);
-
-    //Map<email, session>
-//    Map<List<String>, List<HttpSession>> httpSessionMap = new HashMap();
     Map<String, HttpSession> httpSessionMap = new HashMap<>();
 
     public LoginController() throws SQLException {
@@ -77,7 +74,8 @@ public class LoginController {
         }
         //Starts a new session
         else {
-            HttpSession session = ctx.req().getSession(true);
+//            HttpSession session = ctx.req().getSession(true);
+            session = ctx.req().getSession(true);
             session.setAttribute("user", userDb);
             httpSessionMap.put(userDb.getEmail(), session);
             ctx.status(200);
@@ -85,6 +83,7 @@ public class LoginController {
             logger.info("User login: " + userDb.getEmail());
         }
     }
+
 
     /**
      * Retrieve user from db using its email as user
@@ -112,6 +111,7 @@ public class LoginController {
         return null;
     }
 
+
     /**
      * Close session for user, if no session found, will show an error
      * @param ctx
@@ -121,7 +121,8 @@ public class LoginController {
         String emailRequest = loginRequestDto.getEmail();
         if (httpSessionMap.containsKey(emailRequest)) {
             //Close session
-            HttpSession session = ctx.req().getSession(false);
+//            HttpSession session = ctx.req().getSession(false);
+            session = ctx.req().getSession(false);
             session.invalidate();
             httpSessionMap.remove(emailRequest);
             ctx.json("{\"info\": \"User logout\"}");
@@ -133,14 +134,30 @@ public class LoginController {
         }
     }
 
+
     /**
      * Check if there is a session opened
-     * @param ctx
      * @return
      */
-    public boolean checkLogin(Context ctx) {
-        return !httpSessionMap.isEmpty();
+    public LoginRequestDto checkLoginReturn(Context ctx) {
+        session = ctx.req().getSession();
+        LoginRequestDto loginRequestDto = (LoginRequestDto) session.getAttribute("user");
+        return loginRequestDto;
     }
+ /*   public User checkLogin(Context ctx) {
+        session = ctx.req().getSession();
+        User user = (User) session.getAttribute("user");
+        return user;
+    }*/
+
+    public void checkLogin(Context ctx) {
+        LoginRequestDto login = ctx.bodyAsClass(LoginRequestDto.class);
+        if (checkLoginReturn(ctx) == null)
+            System.out.println("No hay sesión");
+        else
+            System.out.println("Si hay sesion");
+    }
+
 
     /**
      * Entry point for the application
@@ -155,102 +172,11 @@ public class LoginController {
     public Javalin startApi() {
         Javalin app = Javalin.create();
         app.post("/auth/register/account", accountController::registerNewAccount);
-        app.post("auth/register/user", userController::registerNewUser);
+        app.post("/auth/register/user", userController::registerNewUser);
         app.post("/auth/login", this::loginUser);
         app.post("/auth/logout", this::logoutUser);
-/*
-        //Session handling middleware
-        app.before(ctx -> {
-            String sessionId = ctx.cookie("sessionId");
-            if (sessionId == null || !sessionStore.containsKey(sessionId)) {
-                sessionId = UUID.randomUUID().toString(); //Create a new session Id
-                ctx.cookie("sessionId", sessionId); //Set cookie
-                sessionStore.put(sessionId, new HashMap<>()); //Create new session
-            }
-            ctx.attribute("session", sessionStore.get(sessionId)); //Attach session to context
-            sessionStore.forEach((key, value) -> System.out.println("key " + key + " " + "value " + value));
-        });
-*//*
-        //Login endpoint
-        app.post("/auth/login", ctx -> {
-            LoginRequestDto loginRequest = objectMapper.readValue(ctx.body(), LoginRequestDto.class); //Read payload
-            String email = loginRequest.getEmail();
-            String rowPassword = loginRequest.getPassword();
-            String newHashedPassword = "";
-            HashService hashService = new HashService();
-
-            try (Connection conn = ConnectionController.getConnection()) {
-                String sql = "SELECT password FROM accounts WHERE email = ?";
-                PreparedStatement pstm = pstm = conn.prepareStatement(sql);
-                pstm.setString(1, email);
-
-                ResultSet rs = pstm.executeQuery();
-                if (rs.next()) {
-                    String hashedPassFromDb = rs.getString("password"); //This password comes from database
-                    //encodes rowPassword with hashedPasswordFromDb salt
-                    newHashedPassword = hashService.verifyPassword(rowPassword, hashedPassFromDb);
-
-                    //Compare if both passwords match
-                    if (hashedPassFromDb.equals(newHashedPassword)) {
-                        //Valid credentials
-                        Map<String, Object> session = ctx.attribute("session");
-                        session.put("email", email); //Store email in session
-                        sessionMap = session;
-//                        sessionMap.forEach((key, value) -> System.out.println("SMapKey " + key + " SMapValue " + value));
-                        //Todo delete these following 3 lines
-//                        String sessionId = ctx.cookie("sessionId");
-//                        logger.info("Session Id: " + sessionId);
-//                        session.forEach((key, value) -> logger.info("Session map: [" + key + "]: [" + value + "]"));
-
-                        ctx.status(200);
-                        ctx.json("{\"login\": \"Login successful\"}");
-                    } else { //Wrong password
-                        ctx.status(401);
-                        ctx.json("{\"login\": \"Invalid credentials\"}");
-                    }
-                } else { //User not found
-                    ctx.status(401);
-                    ctx.json("{\"login\": \"Invalid credentials\"}");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-*/
-/*
-        //Todo Close individual session in case there is more than one open, use email to do so
-        //Logout endpoint
-        app.post("/auth/logout", ctx -> {
-//            LogoutRequest logoutRequest = ctx.bodyAsClass(LogoutRequest.class);
-//            String receivedEmail = logoutRequest.getEmail();
-//            sessionStore.forEach((key, value) -> System.out.println("stored session: " + key + " value: " + value));
-//            String email;
-//            if (sessionMap.get("email").equals(receivedEmail))
-//                System.out.println("AQuí está el email");
-////                email = sessionMap.ge
-//            System.out.println(sessionStore.keySet());
-//            System.out.println(sessionStore.values());
-//
-//
-//
-//            if (sessionStore.containsValue(sessionMap.get("email"))) {
-//                System.out.println("Sí existe la sessión");
-//            }
-/*
-            String sessionId = ctx.cookie("sessionId");
-            if (sessionId != null) {
-                sessionStore.remove(sessionId); //Delete session
-                ctx.removeCookie("sessionId"); //Delete cookie
-                ctx.status(200);
-                ctx.json("{\"session\": \"Closed\"}");
-                logger.info("Logout successful");
-            }
-            else {
-                ctx.status(404);
-                ctx.json("{\"session\": \"Not found\"}");
-                logger.info("No session found, cannot close");
-            }
-        });*/
+        app.get("/users/{id}", userController::getUserById);
+        app.put("/users/{id}", userController::updateUser);
 
         return app;
     }

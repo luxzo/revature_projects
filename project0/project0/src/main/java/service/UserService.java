@@ -29,4 +29,13 @@ public class UserService {
         newUser.setAccount_id(accountId);
         return userDao.registerNewUser(newUser);
     }
+
+    public User updateUser(String name, String lastName, String phone, int userId) {
+        User updatedUser = new User();
+        updatedUser.setName(name);
+        updatedUser.setLast_name(lastName);
+        updatedUser.setPhone(phone);
+        updatedUser.setUserId(userId);
+        return userDao.updateUser(updatedUser);
+    }
 }

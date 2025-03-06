@@ -39,9 +39,24 @@ public class UserDao {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+           logger.error(e.getMessage());
         }
         return newUser;
+    }
+
+    public User updateUser(User updatedUser) {
+        String updateUserSql = "UPDATE users SET name = ?, last_name = ?, phone = ? WHERE user_id = ?";
+        try (Connection conn = ConnectionController.getConnection()) {
+            PreparedStatement pstm = conn.prepareStatement(updateUserSql);
+            pstm.setString(1, updatedUser.getName());
+            pstm.setString(2, updatedUser.getLast_name());
+            pstm.setString(3, updatedUser.getPhone());
+            pstm.setInt(4, updatedUser.getUserId());
+            pstm.executeUpdate();
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        }
+        return updatedUser;
     }
 
     /*Get a user by Id, will show name, lastName and phone.
