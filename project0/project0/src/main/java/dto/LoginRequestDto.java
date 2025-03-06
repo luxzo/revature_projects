@@ -17,11 +17,19 @@ public class LoginRequestDto {
         this.email = email;
     }
 
-    public String getPassword() throws Exception {
+    public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "LoginRequestDto{" +
+                "email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }
