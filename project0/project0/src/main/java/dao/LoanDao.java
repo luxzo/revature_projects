@@ -79,7 +79,7 @@ public class LoanDao {
 
             pstm.executeUpdate();
         } catch (Exception e) {
-//            logger.error(e.getMessage());
+            logger.error(e.getMessage());
             e.printStackTrace();
         }
         return updatedLoan;
