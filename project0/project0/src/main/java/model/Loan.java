@@ -1,12 +1,16 @@
 package model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.math.BigDecimal;
 import java.sql.Date;
 
 public class Loan {
     private int loan_id;
     private BigDecimal loan_amount;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date loan_start_date;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date loan_end_date;
     private int loan_term;
     private int user_id;
