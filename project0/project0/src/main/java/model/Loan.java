@@ -12,7 +12,6 @@ public class Loan {
     private Date loan_start_date;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date loan_end_date;
-//    private int loan_term;
     private int user_id;
     private int loan_status_id;
 
@@ -50,14 +49,6 @@ public class Loan {
     public void setLoan_end_date(Date loan_end_date) {
         this.loan_end_date = loan_end_date;
     }
-
-//    public int getLoan_term() {
-//        return loan_term;
-//    }
-
-//    public void setLoan_term(int loan_term) {
-//        this.loan_term = loan_term;
-//    }
 
     public int getUser_id() {
         return user_id;

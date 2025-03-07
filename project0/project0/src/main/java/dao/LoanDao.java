@@ -35,7 +35,7 @@ public class LoanDao {
     }
 
     public LoanByIdDto getLoanById(int loanId) {
-        String sql = "select loan_id, loan_amount, loan_start_date, loan_end_date, loan_term, u.name, u.last_name, u.phone, a.email, ls.status\n" +
+        String sql = "select loan_id, loan_amount, loan_start_date, loan_end_date, u.name, u.last_name, u.phone, a.email, ls.status\n" +
                 "from loans l\n" +
                 "join users u on l.user_id = u.user_id \n" +
                 "join accounts a on u.account_id = a.account_id \n" +
@@ -52,7 +52,6 @@ public class LoanDao {
                         rs.getBigDecimal("loan_amount"),
                         rs.getDate("loan_start_date"),
                         rs.getDate("loan_end_date"),
-                        rs.getInt("loan_term"),
                         rs.getString("name"),
                         rs.getString("last_name"),
                         rs.getString("phone"),

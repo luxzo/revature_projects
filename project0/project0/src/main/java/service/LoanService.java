@@ -30,7 +30,6 @@ public class LoanService {
         newLoan.setLoan_amount(loan_amount);
         newLoan.setLoan_start_date(loan_start_date);
         newLoan.setLoan_end_date(loan_end_date);
-//        newLoan.setLoan_term(loan_term);
         newLoan.setUser_id(user_id);
         newLoan.setLoan_status_id(loan_status_id);
 

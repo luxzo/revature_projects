@@ -12,19 +12,17 @@ public class LoanByIdDto {
     private Date loan_start_date;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date loan_end_date;
-    private int loan_term;
     private String name;
     private String last_name;
     private String phone;
     private String email;
     private String status;
 
-    public LoanByIdDto(int loan_id, BigDecimal loan_amount, Date loan_start_date, Date loan_end_date, int loan_term, String name, String last_name, String phone, String email, String status) {
+    public LoanByIdDto(int loan_id, BigDecimal loan_amount, Date loan_start_date, Date loan_end_date, String name, String last_name, String phone, String email, String status) {
         this.loan_id = loan_id;
         this.loan_amount = loan_amount;
         this.loan_start_date = loan_start_date;
         this.loan_end_date = loan_end_date;
-        this.loan_term = loan_term;
         this.name = name;
         this.last_name = last_name;
         this.phone = phone;
@@ -62,14 +60,6 @@ public class LoanByIdDto {
 
     public void setLoan_end_date(Date loan_end_date) {
         this.loan_end_date = loan_end_date;
-    }
-
-    public int getLoan_term() {
-        return loan_term;
-    }
-
-    public void setLoan_term(int loan_term) {
-        this.loan_term = loan_term;
     }
 
     public String getName() {
