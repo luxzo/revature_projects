@@ -17,18 +17,17 @@ public class LoanDao {
 
 
     public Loan createNewLoan(Loan newLoan) throws PSQLException {
-        String sql = "INSERT INTO public.loans(loan_amount, loan_start_date, loan_end_date, loan_term, user_id, loan_status_id) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO public.loans(loan_amount, loan_start_date, loan_end_date, user_id, loan_status_id) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = ConnectionController.getConnection()) {
             PreparedStatement pstm = conn.prepareStatement(sql);
             pstm.setBigDecimal(1, newLoan.getLoan_amount());
             pstm.setDate(2, newLoan.getLoan_start_date());
             pstm.setDate(3, newLoan.getLoan_end_date());
-            pstm.setInt(4, newLoan.getLoan_term());
-            pstm.setInt(5, newLoan.getUser_id());
+            pstm.setInt(4, newLoan.getUser_id());
             //Set status_id as Pending (4) by default
-            pstm.setInt(6, newLoan.getLoan_status_id());
-
-            logger.info("INSERT INTO public.loans(loan_amount, loan_start_date, loan_end_date, loan_term, user_id, loan_status_id) VALUES (?, ?, ?, ?, ?, ?)");
+            pstm.setInt(5, newLoan.getLoan_status_id());
+            pstm.execute();
+            logger.info("INSERT INTO public.loans(loan_amount, loan_start_date, loan_end_date, user_id, loan_status_id) VALUES (?, ?, ?, ?, ?)");
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -61,10 +60,28 @@ public class LoanDao {
                         rs.getString("status")
                 );
             }
-
         } catch (SQLException e) {
             logger.error(e.getMessage());
         }
         return null;
+    }
+
+    public Loan updateLoan(Loan updatedLoan) {
+        String sql = "UPDATE loans SET loan_amount = ?, loan_start_date = ?, loan_end_date = ?, loan_status_id = ? WHERE user_id = ? AND loan_id = ?";
+        try (Connection conn = ConnectionController.getConnection()) {
+            PreparedStatement pstm = conn.prepareStatement(sql);
+            pstm.setBigDecimal(1, updatedLoan.getLoan_amount());
+            pstm.setDate(2, updatedLoan.getLoan_start_date());
+            pstm.setDate(3, updatedLoan.getLoan_end_date());
+            pstm.setInt(4, updatedLoan.getLoan_status_id());
+            pstm.setInt(5, updatedLoan.getUser_id());
+            pstm.setInt(6, updatedLoan.getLoan_id());
+
+            pstm.executeUpdate();
+        } catch (Exception e) {
+//            logger.error(e.getMessage());
+            e.printStackTrace();
+        }
+        return updatedLoan;
     }
 }

@@ -53,7 +53,7 @@ public class StartController {
         app.put("/users/{id}", userController::updateUser);
         app.post("/loans", loanController::createNewLoan);
         app.get("/loans/{id}", loanController::getLoanById);
-
+        app.put("/loans/{id}", loanController::updateLoan);
 
         app.beforeMatched("users*", this::checkLogin);
         app.beforeMatched("loans*", this::checkLogin);

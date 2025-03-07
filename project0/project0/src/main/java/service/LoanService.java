@@ -23,7 +23,6 @@ public class LoanService {
             BigDecimal loan_amount,
             Date loan_start_date,
             Date loan_end_date,
-            int loan_term,
             int user_id,
             int loan_status_id
     ) {
@@ -31,7 +30,7 @@ public class LoanService {
         newLoan.setLoan_amount(loan_amount);
         newLoan.setLoan_start_date(loan_start_date);
         newLoan.setLoan_end_date(loan_end_date);
-        newLoan.setLoan_term(loan_term);
+//        newLoan.setLoan_term(loan_term);
         newLoan.setUser_id(user_id);
         newLoan.setLoan_status_id(loan_status_id);
 
@@ -52,5 +51,16 @@ public class LoanService {
         if (loanDao.getLoanById(loanId) == null)
             logger.error("Loan id: " + loanId + " not found");
         return loanDao.getLoanById(loanId);
+    }
+
+    public Loan updateLoan(int loanId, BigDecimal loanAmount, Date loanStartDate, Date loanEndDate, int userId, int loanStatusId) {
+        Loan updatedLoan = new Loan();
+        updatedLoan.setLoan_id(loanId);
+        updatedLoan.setLoan_amount(loanAmount);
+        updatedLoan.setLoan_start_date(loanStartDate);
+        updatedLoan.setLoan_end_date(loanEndDate);
+        updatedLoan.setUser_id(userId);
+        updatedLoan.setLoan_status_id(loanStatusId);
+        return loanDao.updateLoan(updatedLoan);
     }
 }

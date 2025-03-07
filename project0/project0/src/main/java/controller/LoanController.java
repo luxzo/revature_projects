@@ -28,7 +28,6 @@ public class LoanController {
                 loan.getLoan_amount(),
                 loan.getLoan_start_date(),
                 loan.getLoan_end_date(),
-                loan.getLoan_term(),
                 loan.getUser_id(),
                 loan.getLoan_status_id()
         );
@@ -58,5 +57,25 @@ public class LoanController {
             ctx.status(404);
             ctx.json("{\n\"loan_id\": \"" + loanId + "\"\n}");
         }
+    }
+
+    public void updateLoan(Context ctx) {
+//        int userId = Integer.parseInt(ctx.pathParam("id"));
+        int loanId = Integer.parseInt(ctx.pathParam("id"));
+        Loan loan = ctx.bodyAsClass(Loan.class);
+        Loan updatedLoan = null;
+        try {
+            updatedLoan = loanService.updateLoan(
+                    loanId,
+                    loan.getLoan_amount(),
+                    loan.getLoan_start_date(),
+                    loan.getLoan_end_date(),
+                    loan.getUser_id(),
+                    loan.getLoan_status_id());
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            e.printStackTrace();
+        }
+        ctx.json(updatedLoan);
     }
 }
