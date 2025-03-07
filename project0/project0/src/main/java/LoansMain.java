@@ -1,6 +1,7 @@
 import controller.AccountController;
 import controller.ConnectionController;
 import controller.LoginController;
+import controller.StartController;
 import dao.AccountDao;
 import dao.AccountRoleDao;
 import dao.UserDao;
@@ -20,9 +21,8 @@ public class LoansMain {
         AccountService accountService = new AccountService(accountDao);
         AccountController accountController = new AccountController(accountService);
 
-        LoginController loginController = new LoginController();
-        Javalin app = loginController.startApi();
+        StartController startController = new StartController();
+        Javalin app = startController.startApi();
         app.start(8080);
-
     }
 }

@@ -136,35 +136,25 @@ public class LoginController {
 
 
     /**
-     * Check if there is a session opened
+     * Check if there is an open session
      * @return
      */
-    public LoginRequestDto checkLoginReturn(Context ctx) {
-        session = ctx.req().getSession();
-        LoginRequestDto loginRequestDto = (LoginRequestDto) session.getAttribute("user");
-        return loginRequestDto;
-    }
- /*   public User checkLogin(Context ctx) {
-        session = ctx.req().getSession();
-        User user = (User) session.getAttribute("user");
-        return user;
-    }*/
-
-    public void checkLogin(Context ctx) {
-        LoginRequestDto login = ctx.bodyAsClass(LoginRequestDto.class);
-        if (checkLoginReturn(ctx) == null)
-            System.out.println("No hay sesión");
-        else
-            System.out.println("Si hay sesion");
+    public boolean checkLoginReturn(Context ctx) {
+        session = ctx.req().getSession(false);
+        return session != null && session.getAttribute("user") != null;
     }
 
 
     /**
      * Entry point for the application
      * Endpoints:
-     * /auth/login login user
-     * /auth/register/account register a new account
-     * /auth/register/user register a new user
+     * post /auth/login login user
+     * post /auth/register/account register a new account
+     * post /auth/register/user register a new user
+     * post /auth/login user login
+     * post /auth/logout user logout
+     * get /users/{id} find user by id
+     * put /users/{id} Update user data
      * After each endpoint, a Javalin exception may be arised
      *
      * @return app

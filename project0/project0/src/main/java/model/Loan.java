@@ -3,18 +3,71 @@ package model;
 import java.math.BigDecimal;
 import java.sql.Date;
 
-public record Loan(
-        String loan_id,
-        BigDecimal loan_amount,
-        Date start_date,
-        Date end_date,
-        Date due_date,
-        float interest_rate,
-        BigDecimal amount_due,
-        int loan_term,
-        BigDecimal debt_payment,
-        Date debt_payment_date,
-        String user_id,
-        String loan_status_id
-) {
+public class Loan {
+    private int loan_id;
+    private BigDecimal loan_amount;
+    private Date loan_start_date;
+    private Date loan_end_date;
+    private int loan_term;
+    private int user_id;
+    private int loan_status_id;
+
+    public Loan() {
+    }
+
+    public int getLoan_id() {
+        return loan_id;
+    }
+
+    public void setLoan_id(int loan_id) {
+        this.loan_id = loan_id;
+    }
+
+    public BigDecimal getLoan_amount() {
+        return loan_amount;
+    }
+
+    public void setLoan_amount(BigDecimal loan_amount) {
+        this.loan_amount = loan_amount;
+    }
+
+    public Date getLoan_start_date() {
+        return loan_start_date;
+    }
+
+    public void setLoan_start_date(Date loan_start_date) {
+        this.loan_start_date = loan_start_date;
+    }
+
+    public Date getLoan_end_date() {
+        return loan_end_date;
+    }
+
+    public void setLoan_end_date(Date loan_end_date) {
+        this.loan_end_date = loan_end_date;
+    }
+
+    public int getLoan_term() {
+        return loan_term;
+    }
+
+    public void setLoan_term(int loan_term) {
+        this.loan_term = loan_term;
+    }
+
+    public int getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
+    }
+
+    public int getLoan_status_id() {
+        return loan_status_id;
+    }
+
+    public void setLoan_status_id(int loan_status_id) {
+        this.loan_status_id = loan_status_id;
+    }
 }

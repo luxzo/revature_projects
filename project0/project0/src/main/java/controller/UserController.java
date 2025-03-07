@@ -13,18 +13,16 @@ import java.sql.SQLException;
 public class UserController {
     public static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
-//    ConnectionController connController = new ConnectionController();
 
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    /*
-     * Get a user by id handler
+    /**
+     * Get a user by id
      * Todo: user must watch its own user, managaer can watch any user by id
      */
     public void getUserById(Context ctx) throws SQLException {
-//        LoginController loginController = new LoginController();
             int userId = Integer.parseInt(ctx.pathParam("id"));
             UserDto user;
 
@@ -42,10 +40,9 @@ public class UserController {
     }
 
 
-    /*
+    /**
      * Post a new user
-     * First must be an AccountController object to create a user
-     *  Todo add exception handling
+     * First, must be an AccountController object to create a user
      */
     public void registerNewUser(Context ctx) {
         User user = ctx.bodyAsClass(User.class);
@@ -68,6 +65,11 @@ public class UserController {
         }
     }
 
+    /**
+     * Update user data
+     * Todo validate so manager can update itself or any user. User must change only its own data
+     * @param ctx
+     */
     public void updateUser(Context ctx) {
         int userId = Integer.parseInt(ctx.pathParam("id"));
         User user = ctx.bodyAsClass(User.class);

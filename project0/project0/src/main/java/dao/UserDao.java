@@ -59,12 +59,12 @@ public class UserDao {
         return updatedUser;
     }
 
-    /*Get a user by Id, will show name, lastName and phone.
-    * If user does not exist, will prompt an error in console and show a Json object with user Id, as well
-    * status code will be 404
+    /**
+     * Get a user by Id, will show name, lastName and phone.
+     * If user does not exist, will prompt an error in console and show a Json object with user Id, as well
+     * status code will be 404
      */
     public UserDto getUserById(int userId) {
-//        UserDto user;
         try (Connection conn = ConnectionController.getConnection()) {
             String sql = "SELECT name, last_name, phone FROM users WHERE user_id = ?";
             PreparedStatement pstm = conn.prepareStatement(sql);
