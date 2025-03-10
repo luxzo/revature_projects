@@ -4,9 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dao.AccountDao;
 import dao.LoanDao;
 import dao.UserDao;
+import dto.LoginRequestDto;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.UnauthorizedResponse;
+import model.Account;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.AccountService;
@@ -53,21 +56,47 @@ public class StartController {
         app.put("/users/{id}", userController::updateUser);
         app.post("/loans", loanController::createNewLoan);
         app.get("/loans/{id}", loanController::getLoanById);
-        app.put("/loans/{id}", loanController::updateLoan);
+        app.put("/loans/{id}/update", loanController::updateLoan);
+//        app.put("/users/{id}/delete", userController::deleteUser);
 
         app.beforeMatched("users*", this::checkLogin);
         app.beforeMatched("loans*", this::checkLogin);
+        app.before("/loans/{id}/update", this::checkManagerRole);
+        //app.before("/users/{id}/delete", this::checkManagerRole);
+        //app.before("/users/{id}", this::checkAccountRole);
+
+        app.exception(UnauthorizedResponse.class, (e, ctx) -> {
+            ctx.status(403);
+            ctx.result(e.getMessage());
+        });
 
         return app;
     }
 
     private void checkLogin(Context ctx) throws SQLException {
         LoginController loginController = new LoginController();
-//        boolean isLogged = loginController.checkLoginReturn(ctx);
-//        if (!isLogged) {
         if (!loginController.checkLoginReturn(ctx)) {
             ctx.status(401);
             throw new UnauthorizedResponse();
+        }
+    }
+
+    private void checkManagerRole(Context ctx)  {
+        LoginRequestDto loginRequest = (LoginRequestDto) ctx.req().getSession(false).getAttribute("user");
+        if (loginRequest == null || loginRequest.getRole_id() != 1) {
+            ctx.status(403);
+            logger.error("Unauthorized user");
+            throw new UnauthorizedResponse("Access denied");
+        }
+    }
+
+    private void checkAccountRole(Context ctx) {
+        User userId = new User();
+        LoginRequestDto loginRequest = (LoginRequestDto) ctx.req().getSession(false).getAttribute("user");
+        if (loginRequest == null || loginRequest.getRole_id() != 1 || loginRequest.getUser_id() != userId.getUserId()) {
+            ctx.status(403);
+            logger.error("Unauthorized user");
+            throw new UnauthorizedResponse("Access denied");
         }
     }
 }

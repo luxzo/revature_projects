@@ -7,6 +7,7 @@ import dto.LoginRequestDto;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import jakarta.servlet.http.HttpSession;
+import model.Account;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,7 @@ public class LoginController {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     //This map stores session data
     private static final Map<String, Map<String, Object>> sessionStore = new HashMap<>();
-    HttpSession session;
+    //HttpSession session;
 
     Connection conn = ConnectionController.getConnection();
     AccountDao accountDao = new AccountDao(conn);
@@ -34,7 +35,7 @@ public class LoginController {
     UserDao userDao = new UserDao();
     UserService userService = new UserService(userDao);
     UserController userController = new UserController(userService);
-    Map<String, HttpSession> httpSessionMap = new HashMap<>();
+    //Map<String, HttpSession> httpSessionMap = new HashMap<>();
 
     public LoginController() throws SQLException {
     }
@@ -72,15 +73,15 @@ public class LoginController {
         if (!hashedPasswordFromDb.equals(newHashedPassword)) {
             ctx.status(401).json("{\"error\":\"Invalid credentials\"}");
         }
-        //Starts a new session
+        //If password match, start a new session
         else {
-//            HttpSession session = ctx.req().getSession(true);
-            session = ctx.req().getSession(true);
+            HttpSession session = ctx.req().getSession(true);
             session.setAttribute("user", userDb);
-            httpSessionMap.put(userDb.getEmail(), session);
+//            httpSessionMap.put(userDb.getEmail(), session);
             ctx.status(200);
             ctx.json("{\"message\": \"Login successful\"}");
             logger.info("User login: " + userDb.getEmail());
+            logger.info("Role id: " + userDb.getRole_id());
         }
     }
 
@@ -91,7 +92,8 @@ public class LoginController {
      * @return LoginRequestDto object
      */
     public LoginRequestDto getUserFromDb(String email) {
-        String sql = "SELECT email, password FROM public.accounts WHERE email = ?";
+//        String sql = "SELECT email, password, role_id FROM public.accounts WHERE email = ?";
+        String sql = "SELECT email, password, role_id, user_id FROM public.accounts JOIN users ON users.account_id = accounts.account_id  WHERE email = ?";
         try (Connection conn = ConnectionController.getConnection()) {
             PreparedStatement pstm = conn.prepareStatement(sql);
             pstm.setString(1, email);
@@ -100,6 +102,8 @@ public class LoginController {
                 LoginRequestDto loginDb = new LoginRequestDto();
                 loginDb.setEmail(rs.getString("email"));
                 loginDb.setPassword(rs.getString("password"));
+                loginDb.setRole_id(rs.getInt("role_id"));
+                loginDb.setUser_id(rs.getInt("user_id"));
                 return loginDb;
             }
             return null;
@@ -117,21 +121,25 @@ public class LoginController {
      * @param ctx
      */
     public void logoutUser(Context ctx) {
-        LoginRequestDto loginRequestDto = ctx.bodyAsClass(LoginRequestDto.class);
-        String emailRequest = loginRequestDto.getEmail();
-        if (httpSessionMap.containsKey(emailRequest)) {
+//        LoginRequestDto loginRequestDto = ctx.bodyAsClass(LoginRequestDto.class);
+//        String emailRequest = loginRequestDto.getEmail();
+//        if (httpSessionMap.containsKey(emailRequest)) {
             //Close session
 //            HttpSession session = ctx.req().getSession(false);
-            session = ctx.req().getSession(false);
+//            HttpSession session = ctx.req().getSession(false);
+//            session.invalidate();
+            //httpSessionMap.remove(emailRequest);
+//            ctx.json("{\"info\": \"User logout\"}");
+//            logger.info("Session closed for " + emailRequest);
+//        }
+//        else {
+//            ctx.status(400).json("{\"error\":\"Not logged in\"}");
+//            logger.error("Session not found: " + emailRequest);
+//        }
+        HttpSession session = ctx.req().getSession(false);
+        if (session != null)
             session.invalidate();
-            httpSessionMap.remove(emailRequest);
-            ctx.json("{\"info\": \"User logout\"}");
-            logger.info("Session closed for " + emailRequest);
-        }
-        else {
-            ctx.status(400).json("{\"error\":\"Not logged in\"}");
-            logger.error("Session not found: " + emailRequest);
-        }
+        ctx.status(200).json("{\"message\":\"Logged out\"}");
     }
 
 
@@ -140,7 +148,7 @@ public class LoginController {
      * @return
      */
     public boolean checkLoginReturn(Context ctx) {
-        session = ctx.req().getSession(false);
+        HttpSession session = ctx.req().getSession(false);
         return session != null && session.getAttribute("user") != null;
     }
 

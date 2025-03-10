@@ -1,12 +1,4 @@
 package model;
-/*
-public record Account(
-        String account_id,
-        String email,
-        String password,
-        String role_id
-) {
-}*/
 
 public class Account {
     private int accountId;
