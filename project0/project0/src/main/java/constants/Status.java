@@ -1,9 +1,7 @@
 package constants;
 
 public enum Status {
-    ACTIVE,
-    CANCELLED,
-    CLOSED,
+    ACCEPTED,
     PENDING,
     REJECTED
 }

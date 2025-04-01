@@ -10,9 +10,9 @@ public class AccountRoleDao {
      */
     public AccountRole findByRoleName(String roleName) {
         AccountRole accountRole = new AccountRole();
-        if (roleName.toUpperCase().equals("MANAGER"))
+        if (roleName.equalsIgnoreCase("MANAGER"))
             accountRole.setRole_id(1);
-        else if (roleName.toUpperCase().equals("USER")) {
+        else if (roleName.equalsIgnoreCase("USER")) {
             accountRole.setRole_id(2);
         }
         return accountRole;

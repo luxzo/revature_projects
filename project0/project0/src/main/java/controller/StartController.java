@@ -1,6 +1,5 @@
 package controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dao.AccountDao;
 import dao.LoanDao;
 import dao.UserDao;
@@ -8,7 +7,6 @@ import dto.LoginRequestDto;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.UnauthorizedResponse;
-import model.Account;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,10 +36,6 @@ public class StartController {
 
     /**
      * Entry point for the application
-     * Endpoints:
-     * /auth/login login user
-     * /auth/register/account register a new account
-     * /auth/register/user register a new user
      * After each endpoint, a Javalin exception may be arised
      *
      * @return app
@@ -93,7 +87,7 @@ public class StartController {
     private void checkAccountRole(Context ctx) {
         User userId = new User();
         LoginRequestDto loginRequest = (LoginRequestDto) ctx.req().getSession(false).getAttribute("user");
-        if (loginRequest == null || loginRequest.getRole_id() != 1 || loginRequest.getUser_id() != userId.getUserId()) {
+        if (loginRequest == null || loginRequest.getRole_id() != 2 || loginRequest.getUser_id() != userId.getUserId()) {
             ctx.status(403);
             logger.error("Unauthorized user");
             throw new UnauthorizedResponse("Access denied");

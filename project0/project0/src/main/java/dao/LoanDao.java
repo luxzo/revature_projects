@@ -28,7 +28,7 @@ public class LoanDao {
             pstm.setInt(5, newLoan.getLoan_status_id());
             pstm.execute();
             logger.info("INSERT INTO public.loans(loan_amount, loan_start_date, loan_end_date, user_id, loan_status_id) VALUES (?, ?, ?, ?, ?)");
-        } catch (Exception e) {
+        } catch (SQLException e) {
             logger.error(e.getMessage());
         }
         return newLoan;
